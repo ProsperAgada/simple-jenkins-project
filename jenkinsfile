@@ -6,15 +6,15 @@ pipeline {
     stages {
         stage ("Build Stage"){
             steps {
-                echo "Building the Application..."
+                echo "Building application into .jar..."
                 sh "mvn clean package"
-
             }
         }
 
-        stage ("Test Stage"){
+        stage ("Packing Stage"){
             steps {
-                echo "Testing the Application..."
+                echo "Packaging application into Dockerfile..."
+                sh "docker build -t simple_jave/project:0.1"
 
             }
         }
