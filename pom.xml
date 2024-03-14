@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.company</groupId>
-    <artifactId>project</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>prosper</artifactId>
+    <version>0.0.1</version>
     <packaging>jar</packaging>
 
     <name>New App</name>

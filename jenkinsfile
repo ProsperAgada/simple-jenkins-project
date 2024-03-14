@@ -14,7 +14,7 @@ pipeline {
         stage ("Packing Stage"){
             steps {
                 echo "Packaging application into DockerImage..."
-                withCredentials([usernamePassword(credentialsId:'DockerHub-secret', passwordVariable:'PASS', usernameVariable:'USER')]){
+                withCredentials([usernamePassword(credentialsId:'DockerHub-secret', passwordVariable:'PASS', usernameVariable:'USER')]) {
                     sh "docker build -t agasprosper/simple-java-app:1.0 ."
                     sh "echo $PASS | docker login -u $USER --password-stdin"
                     sh "docker push agasprosper/simple-java-app:1.0 "

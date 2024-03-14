@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: java-configmap
+data:
+  database_host: postgres
+  database_port: '5432'
+  database: javadb
+  database_user: postgres

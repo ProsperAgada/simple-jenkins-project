@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: java-ingress
+  annotations:
+    nginx.kubernetes.io/rewrite-target: /
+  labels:
+    name: java-ingress
+
+spec:
+  rules:
+  - host: simpleapp.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: java-svc
+            port: 
+              number: 32294

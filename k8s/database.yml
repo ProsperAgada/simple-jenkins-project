@@ -1,0 +1,54 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  selector:
+    app: postgres
+  ports:
+  - port: 5432
+  clusterIP: None
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres
+        imagePullPolicy: IfNotPresent
+        
+        env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: java-secret
+              key: database_password
+
+            
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              name: java-configmap
+              key: database_user
+
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: java-configmap
+              key: database
+        ports:
+        - containerPort: 5432
