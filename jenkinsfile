@@ -15,9 +15,9 @@ pipeline {
             steps {
                 echo "Packaging application into DockerImage..."
                 withCredentials([usernamePassword(credentialsId:'DockerHub-secret', passwordVariable:'PASS', usernameVariable:'USER')]) {
-                    sh "docker build -t agasprosper/simple-java-app:1.0 ."
+                    sh "docker build -t agasprosper/simple-java-app:0.1 ."
                     sh "echo $PASS | docker login -u $USER --password-stdin"
-                    sh "docker push agasprosper/simple-java-app:1.0 "
+                    sh "docker push agasprosper/simple-java-app:0.1"
 
                 }
 
@@ -25,8 +25,13 @@ pipeline {
         }
 
         stage ("Deploy Stage"){
+            environment {
+                AWS_ACCESS_KEY_ID = credentials("access-key")
+                AWS_SECRET_ACCESS_KEY = credentials("secret-key")
+            }
             steps {
                 echo "Deploying the Application..."
+                sh "kubectl create deployment nginx --image=nginx --replicas=3"
 
             }
         }
