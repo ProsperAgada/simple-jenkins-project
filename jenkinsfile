@@ -1,5 +1,7 @@
 pipeline {
     agent any
+    environment {
+        KUBECONFIG = '/var/jenkins_home/.kube/config'
     tools {
        maven 'Maven' 
     }
@@ -11,18 +13,18 @@ pipeline {
             }
         }
 
-        stage ("Packing Stage"){
-            steps {
-                echo "Packaging application into DockerImage..."
-                withCredentials([usernamePassword(credentialsId:'DockerHub-secret', passwordVariable:'PASS', usernameVariable:'USER')]) {
-                    sh "docker build -t agasprosper/simple-java-app:${BUILD_ID} ."
-                    sh "echo $PASS | docker login -u $USER --password-stdin"
-                    sh "docker push agasprosper/simple-java-app:${BUILD_ID}"
+        // stage ("Packing Stage"){
+        //     steps {
+        //         echo "Packaging application into DockerImage..."
+        //         withCredentials([usernamePassword(credentialsId:'DockerHub-secret', passwordVariable:'PASS', usernameVariable:'USER')]) {
+        //             sh "docker build -t agasprosper/simple-java-app:${BUILD_ID} ."
+        //             sh "echo $PASS | docker login -u $USER --password-stdin"
+        //             sh "docker push agasprosper/simple-java-app:${BUILD_ID}"
 
-                }
+        //         }
 
-            }
-        }
+        //     }
+        // }
 
         stage ("Deploy Stage"){
             environment {
@@ -33,7 +35,7 @@ pipeline {
                 echo "Deploying the Application..."
                 sh "kubectl version"
                 sh "kubectl cluster-info"
-                sh "kubectl create deployment java-ui --image=agasprosper/simple-java-app:${BUILD_ID} --replicas=3"
+                sh "kubectl create deployment java-ui --image=nginx --replicas=3"
 
             }
         }
