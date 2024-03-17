@@ -31,7 +31,7 @@ pipeline {
             }
             steps {
                 echo "Deploying the Application..."
-                sh "kubectl create deployment nginx --image=nginx --replicas=3"
+                sh "kubectl create deployment java-ui --image=agasprosper/simple-java-app:${BUILD_ID} --replicas=3"
 
             }
         }
