@@ -31,6 +31,8 @@ pipeline {
             }
             steps {
                 echo "Deploying the Application..."
+                sh "kubectl version"
+                sh "kubectl cluster-info"
                 sh "kubectl create deployment java-ui --image=agasprosper/simple-java-app:${BUILD_ID} --replicas=3"
 
             }
