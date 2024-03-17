@@ -2,29 +2,30 @@ pipeline {
     agent any
     environment {
         KUBECONFIG = '/var/jenkins_home/.kube/config'
+    }
     tools {
        maven 'Maven' 
     }
-    stages {
-        stage ("Build Stage"){
-            steps {
-                echo "Building application into .jar..."
-                sh "mvn clean package"
-            }
-        }
+    // stages {
+    //     stage ("Build Stage"){
+    //         steps {
+    //             echo "Building application into .jar..."
+    //             sh "mvn clean package"
+    //         }
+    //     }
 
-        // stage ("Packing Stage"){
-        //     steps {
-        //         echo "Packaging application into DockerImage..."
-        //         withCredentials([usernamePassword(credentialsId:'DockerHub-secret', passwordVariable:'PASS', usernameVariable:'USER')]) {
-        //             sh "docker build -t agasprosper/simple-java-app:${BUILD_ID} ."
-        //             sh "echo $PASS | docker login -u $USER --password-stdin"
-        //             sh "docker push agasprosper/simple-java-app:${BUILD_ID}"
+    //     stage ("Packing Stage"){
+    //         steps {
+    //             echo "Packaging application into DockerImage..."
+    //             withCredentials([usernamePassword(credentialsId:'DockerHub-secret', passwordVariable:'PASS', usernameVariable:'USER')]) {
+    //                 sh "docker build -t agasprosper/simple-java-app:${BUILD_ID} ."
+    //                 sh "echo $PASS | docker login -u $USER --password-stdin"
+    //                 sh "docker push agasprosper/simple-java-app:${BUILD_ID}"
 
-        //         }
+    //             }
 
-        //     }
-        // }
+    //         }
+    //     }
 
         stage ("Deploy Stage"){
             environment {
@@ -40,5 +41,5 @@ pipeline {
             }
         }
 
-    }
+    
 }
