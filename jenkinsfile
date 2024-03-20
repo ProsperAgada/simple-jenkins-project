@@ -34,9 +34,11 @@ pipeline {
             }
             steps {
                 echo "Deploying the Application..."
-                sh "kubectl version"
-                sh "kubectl cluster-info"
-                sh "kubectl create deployment java-ui --image=nginx --replicas=3"
+                    script {
+                        def dockerCmd = 'docker run -p 8080:8080 agasprosper/simple-java-app'
+                        sshagent(['aws-ec2'])
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@13.40.43.250 ${dockerCmd}"
+                    }
 
             }
         }
