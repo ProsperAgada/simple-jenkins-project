@@ -12,7 +12,7 @@ pipeline {
                 script {
                     def dockerCmd = 'docker run -p 8080:8080 agasprosper/simple-java-app'
                     sshagent(['aws-ec2']) {
-                        sh "sudo ssh -o StrictHostKeyChecking=no ec2-user@13.40.43.250 ${dockerCmd}"
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@13.40.43.250 ${dockerCmd}"
                     }
                 }
             }
