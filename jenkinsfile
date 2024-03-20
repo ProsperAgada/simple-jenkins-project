@@ -1,47 +1,21 @@
 pipeline {
     agent any
-    environment {
-        KUBECONFIG = '/var/jenkins_home/.kube/config'
-    }
-    tools {
-       maven 'Maven' 
-    }
+    
     stages {
-        stage ("Build Stage"){
-            steps {
-                echo "Building application into .jar..."
-                sh "mvn clean package"
-            }
-        }
-
-        // stage ("Packing Stage"){
-        //     steps {
-        //         echo "Packaging application into DockerImage..."
-        //         withCredentials([usernamePassword(credentialsId:'DockerHub-secret', passwordVariable:'PASS', usernameVariable:'USER')]) {
-        //             sh "docker build -t agasprosper/simple-java-app:${BUILD_ID} ."
-        //             sh "echo $PASS | docker login -u $USER --password-stdin"
-        //             sh "docker push agasprosper/simple-java-app:${BUILD_ID}"
-
-        //         }
-
-        //     }
-        // }
-
-        stage ("Deploy Stage"){
+        stage("Deploy Stage") {
             environment {
                 AWS_ACCESS_KEY_ID = credentials("access-key")
                 AWS_SECRET_ACCESS_KEY = credentials("secret-key")
             }
             steps {
                 echo "Deploying the Application..."
-                    script {
-                        def dockerCmd = 'docker run -p 8080:8080 agasprosper/simple-java-app'
-                        sshagent(['aws-ec2'])
+                script {
+                    def dockerCmd = 'docker run -p 8080:8080 agasprosper/simple-java-app'
+                    sshagent(['aws-ec2']) {
                         sh "ssh -o StrictHostKeyChecking=no ec2-user@13.40.43.250 ${dockerCmd}"
                     }
-
+                }
             }
         }
-
     }
 }
